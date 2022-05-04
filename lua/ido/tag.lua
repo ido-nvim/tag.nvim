@@ -11,7 +11,13 @@ local function search(kind, prompt)
         return tag.kind == kind
     end, vim.fn.taglist(".*"))
 
-    local item = ido.start(vim.tbl_map(function (tag) return tag.name end, tags), {prompt = prompt.."s: "})
+    local item = ido.start(vim.tbl_map(function (tag) return tag.name end, tags),
+    {
+        prompt = prompt.."s: ",
+    },
+    {
+        query = {lhs = vim.fn.expand("<cword>"):gsub("[^%w_]", ""), rhs = ""}
+    })
 
     if item then
         for _, tag in ipairs(tags) do
